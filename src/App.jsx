@@ -5,6 +5,7 @@ import { app } from "./firebase";
 import "./App.css";
 // Pages
 import SignUpPage from "./pages/SignUp";
+import LogInPage from "./pages/LogIn";
 
 const auth = getAuth(app);
 
@@ -21,9 +22,10 @@ function App() {
 
   return (
     <>
-      <div className="bg-gray-900 text-4xl flex flex-col items-center justify-center h-screen w-full gap-10">
+      <div className="bg-gray-900 text-4xl flex flex-col items-center h-full w-full gap-10">
         <h1 className="text-white">Firebase - Tutorial</h1>
         <SignUpPage />
+        <LogInPage />
       </div>
     </>
   );
