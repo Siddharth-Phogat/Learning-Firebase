@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { app } from "../firebase";
 
-const auth = getAuth(app);
+const auth = getAuth(app); //Set instances
 
 const SignUpPage = () => {
+  // Simply use UseState to add email and password
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // Create function
   const createUser = () => {
     createUserWithEmailAndPassword(auth, email, password).then((value) =>
       alert("Success")
