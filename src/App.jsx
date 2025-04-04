@@ -25,7 +25,7 @@ function App() {
       <div className="bg-gray-900 text-4xl flex flex-col items-center h-full w-full gap-10">
         <h1 className="text-white">Firebase - Tutorial</h1>
         <SignUpPage />
-        <LogInPage />
+        {/* <LogInPage /> */}
       </div>
     </>
   );
