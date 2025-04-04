@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { signUpUserWithEmailAndPassword, putData } from "../slice/firebaseSlice";
+import { signUpUserWithEmailAndPassword, putData, signInWithGoogle } from "../slice/firebaseSlice";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { app } from "../firebase";
 
@@ -14,6 +14,10 @@ const SignUpPage = () => {
     dispatch(putData({key:'users/'+ email.split('@')[0], data: {email, password}}))
     setEmail("");
     setPassword("");
+  }
+
+  const handleSignUpWithGoogle = () => {
+    dispatch(signInWithGoogle());
   }
 
   // Simply use UseState to add email and password
@@ -58,6 +62,12 @@ const SignUpPage = () => {
         onClick={handleSignUpAndPutData}
       >
         Sign Up
+      </button>
+      <button
+        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        onClick={handleSignUpWithGoogle}
+      >
+        SignIn with Google
       </button>
     </div>
   );

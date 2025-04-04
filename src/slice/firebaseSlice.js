@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { initializeApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { getDatabase, ref, set } from 'firebase/database';
 
 const firebaseConfig = {
@@ -17,6 +17,7 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const firebaseAuth = getAuth(firebaseApp);
 const firebaseDatabase = getDatabase(firebaseApp);
+const googleProvider = new GoogleAuthProvider();
 
 // Initial State
 const initialState = {
@@ -54,6 +55,26 @@ export const putData = createAsyncThunk(
   }
 );
 
+export const signInWithGoogle = createAsyncThunk(
+  'firebase/signInWithGoogle',
+  // As there is no argument in this we are using "_" in thunk as an unused payload (placeholder)
+  async (_, { rejectWithValue }) => {
+    try {
+      const googleUser = await signInWithPopup(firebaseAuth, googleProvider);
+      const user = googleUser.user;
+      return {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL
+      };
+    }
+    catch(error){
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const firebaseSlice = createSlice({
   name: 'firebase',
   initialState,
@@ -76,7 +97,16 @@ export const firebaseSlice = createSlice({
       })
       .addCase(putData.rejected, (state, action) => {
         console.error(`Database Error: ${action.payload}`);
-      });
+      })
+      .addCase(signInWithGoogle.pending, (state) => {
+        state.error = null;
+      })
+      .addCase(signInWithGoogle.fulfilled, (state, action) => {
+        state.user = action.payload;
+      })
+      .addCase(signInWithGoogle.rejected, (state, action) => {
+        state.error = action.payload;
+      })
   },
 });
 
