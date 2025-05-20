@@ -19,13 +19,10 @@ const firebaseAuth = getAuth(firebaseApp);
 const firebaseDatabase = getDatabase(firebaseApp);
 const googleProvider = new GoogleAuthProvider();
 
-// Initial State
-const initialState = {
-  user: null,
-};
-
 // using asyncThunk for signup
 export const signUpUserWithEmailAndPassword = createAsyncThunk(
+  // this is the name/path we give it, so that we can use it with help of this name
+  // firebase->signUpUser
   'firebase/signUpUser',
   async ({ email, password }, { rejectWithValue }) => {
     try {
@@ -74,6 +71,11 @@ export const signInWithGoogle = createAsyncThunk(
     }
   }
 );
+
+// Initial State
+const initialState = {
+  user: null,
+};
 
 export const firebaseSlice = createSlice({
   name: 'firebase',
