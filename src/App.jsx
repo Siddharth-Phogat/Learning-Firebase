@@ -1,5 +1,5 @@
 // Firebase
-import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signOut,  } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { app } from "./firebase";
 // CSS
 import "./App.css";
@@ -7,6 +7,8 @@ import "./App.css";
 import SignUpPage from "./pages/SignUp";
 import LogInPage from "./pages/LogIn";
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { writeDataInFirestore, getDocumentFromFirebase, getDocumentByQuery, updateInFirestore } from './slice/firebaseSlice'
 
 const auth = getAuth(app);
 
@@ -20,6 +22,21 @@ function App() {
   //   )
   //   .then((value) => console.log(value));
   // };
+
+  const dispatch = useDispatch();
+
+  const handleWriteDataInFirestore=()=>{
+    dispatch(writeDataInFirestore());
+  }
+  const handleGetDocumentFromFirebase=()=>{
+    dispatch(getDocumentFromFirebase());
+  }
+  const handleGetDocumentByQuery=()=>{
+    dispatch(getDocumentByQuery());
+  }
+  const handleUpdateInFirestore=()=>{
+    dispatch(updateInFirestore());
+  }
 
   const [user, setUser] = useState(null);
   useEffect(() => {
@@ -59,6 +76,22 @@ function App() {
           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           onClick={() => signOut(auth)}
         >LogOut</button>
+        <button
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          onClick={handleWriteDataInFirestore}
+        >Write Data In Firestore</button>
+        <button
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          onClick={handleGetDocumentFromFirebase}
+        >Get Data From Firestore</button>
+        <button
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          onClick={handleGetDocumentByQuery}
+        >Get Docs by Query</button>
+        <button
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          onClick={handleUpdateInFirestore}
+        >Update in FireStore</button>
 
       </div>
     </>
