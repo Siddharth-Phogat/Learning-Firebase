@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { getDatabase, query, ref, set } from 'firebase/database';
+import { getDatabase, query, ref, set, get, child, onValue } from 'firebase/database';
 import { getFirestore, addDoc, collection, doc, getDoc, where, getDocs, updateDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -139,6 +139,35 @@ export const updateInFirestore = createAsyncThunk(
   }
 ); // Same for delete
 
+export const putDataInRealTimeDb = createAsyncThunk(
+  'firebase/putDataInRealTimeDb',
+  async(_,{rejectWithValue, dispatch}) => {
+    try{
+      const result = await dispatch(putData({key: "grandfather/father/child", data: {id: 1, Name: "Sid", Age: 22}}));
+      console.log("Reached: ", result);
+    } catch(error){
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getdataFromRealTimeDb = createAsyncThunk(
+  'firebase/getdataFromRealTimeDb',
+  async(_, {rejectWithValue}) => {
+    try{
+      const snapshot = await get(child(ref(firebaseDatabase), "grandfather/father"));
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        console.log(data);
+        return data;
+      }
+
+    } catch(error){
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 // Initial State
 const initialState = {
   user: null,
@@ -188,6 +217,10 @@ export const firebaseSlice = createSlice({
       .addCase(getDocumentByQuery.fulfilled, (state, action) => {
       })
       .addCase(updateInFirestore.fulfilled, (state, action) => {
+      })
+      .addCase(putDataInRealTimeDb.fulfilled, (state, action) => {
+      })
+      .addCase(getdataFromRealTimeDb.fulfilled, (state, action) => {
       })
   },
 });
